@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -22,75 +23,86 @@ import javax.persistence.OneToOne;
  * @author pagh
  */
 @Entity
-public class Flight implements Serializable {
+public class Flight implements Serializable
+{
+
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Airline airline;  
+    private Airline airline;
     private String flightNumber;
     private String flightTime;
     private short seats;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Airport airport;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = "flight")
-    private List<FlightInstance> flightInstances;
-    
+    @OneToOne(cascade = CascadeType.ALL)
+    private Airport airportTo;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Airport airportFrom;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "flight")
+    private List<FlightInstance> flightInstances = new ArrayList();;
+
     public void addFlightInstance(FlightInstance fi)
     {
         flightInstances.add(fi);
     }
-       public void removeFlightInstance(FlightInstance fi)
+
+    public void removeFlightInstance(FlightInstance fi)
     {
         flightInstances.remove(fi);
-    }
-
-    public Flight(Airline airline, String flightNumber, String flightTime, short seats, Airport airport, List<FlightInstance> flightInstances)
-    {
-        this.airline = airline;
-        this.flightNumber = flightNumber;
-        this.flightTime = flightTime;
-        this.seats = seats;
-        this.airport = airport;
-        this.flightInstances = flightInstances;
     }
 
     public Flight()
     {
     }
 
-    
-    public Integer getId() {
+    public Flight(Airline airline, String flightNumber, String flightTime, short seats, Airport airportTo, Airport airportFrom)
+    {
+        this.airline = airline;
+        this.flightNumber = flightNumber;
+        this.flightTime = flightTime;
+        this.seats = seats;
+        this.airportTo = airportTo;
+        this.airportFrom = airportFrom;
+    }
+
+    public Integer getId()
+    {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(Object object)
+    {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Flight)) {
+        if (!(object instanceof Flight))
+        {
             return false;
         }
         Flight other = (Flight) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "entity.Flight[ id=" + id + " ]";
     }
 
@@ -103,8 +115,6 @@ public class Flight implements Serializable {
     {
         this.airline = airline;
     }
-
-
 
     public String getFlightNumber()
     {
@@ -136,14 +146,14 @@ public class Flight implements Serializable {
         this.seats = seats;
     }
 
-    public Airport getAirport()
+    public Airport getAirportTo()
     {
-        return airport;
+        return airportTo;
     }
 
-    public void setAirport(Airport airport)
+    public void setAirportTo(Airport airportTo)
     {
-        this.airport = airport;
+        this.airportTo = airportTo;
     }
 
     public List<FlightInstance> getFlightInstances()
@@ -155,5 +165,15 @@ public class Flight implements Serializable {
     {
         this.flightInstances = flightInstances;
     }
-    
+
+    public Airport getAirportFrom()
+    {
+        return airportFrom;
+    }
+
+    public void setAirportFrom(Airport airportFrom)
+    {
+        this.airportFrom = airportFrom;
+    }
+
 }

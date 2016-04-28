@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -20,15 +21,15 @@ public class Airport implements Serializable
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String IATACode;
     private String timeZone;
     private String name;
     private String country;
     private String city;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "airport")
-    private List<Flight> flightList;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "airportFrom")
+    private List<Flight> flightList = new ArrayList();;
 
     public Airport()
     {
@@ -38,11 +39,11 @@ public class Airport implements Serializable
     {
         flightList.add(f);
     }
-     public void removeFlight(Flight f)
+
+    public void removeFlight(Flight f)
     {
         flightList.remove(f);
     }
-
 
     public Long getId()
     {
@@ -52,6 +53,15 @@ public class Airport implements Serializable
     public void setId(Long id)
     {
         this.id = id;
+    }
+
+    public Airport(String IATACode, String timeZone, String name, String country, String city)
+    {
+        this.IATACode = IATACode;
+        this.timeZone = timeZone;
+        this.name = name;
+        this.country = country;
+        this.city = city;
     }
 
     public Airport(String IATACode, String timeZone, String name, String country, String city, List<Flight> flightList)

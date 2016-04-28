@@ -6,7 +6,9 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,17 +27,17 @@ public class FlightInstance implements Serializable
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne(fetch = FetchType.EAGER)
     private Flight flight;
     private String flightId;
     private String dato;
-    private String tid;
+    private int tid;
     private short availableSeats;
     private float price;
-    @OneToMany(mappedBy = "fi")
-    private List<Reservation> reservations;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "fi")
+    private List<Reservation> reservations = new ArrayList();;
 
     public void addReservation(Reservation r)
     {
@@ -51,7 +53,19 @@ public class FlightInstance implements Serializable
     {
     }
 
-    public FlightInstance(Flight flight, String flightId, String dato, String tid, short availableSeats, float price, List<Reservation> reservations)
+    public FlightInstance(Flight flight, String flightId, String dato, int tid, short availableSeats, float price)
+    {
+        this.flight = flight;
+        this.flightId = flightId;
+        this.dato = dato;
+        this.tid = tid;
+        this.availableSeats = availableSeats;
+        this.price = price;
+    }
+    
+    
+
+    public FlightInstance(Flight flight, String flightId, String dato, int tid, short availableSeats, float price, List<Reservation> reservations)
     {
         this.flight = flight;
         this.flightId = flightId;
@@ -92,12 +106,12 @@ public class FlightInstance implements Serializable
         this.dato = dato;
     }
 
-    public String getTid()
+    public int getTid()
     {
         return tid;
     }
 
-    public void setTid(String tid)
+    public void setTid(int tid)
     {
         this.tid = tid;
     }

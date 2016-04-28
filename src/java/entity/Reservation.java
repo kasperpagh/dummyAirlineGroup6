@@ -6,12 +6,16 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -25,27 +29,44 @@ public class Reservation implements Serializable
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private short price;
+    private float price;
     @ManyToOne(fetch = FetchType.LAZY)
     private FlightInstance fi;
-    @OneToMany
-    private List<Passenger> passengers;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Passenger> passengers = new ArrayList();
 
     public Reservation(short price, FlightInstance fi, List<Passenger> passengers)
     {
         this.price = price;
         this.fi = fi;
         this.passengers = passengers;
+
+    }
+
+    public Reservation(float price, FlightInstance fi)
+    {
+        this.price = price;
+        this.fi = fi;
     }
 
     public Reservation()
     {
     }
 
-    
-    
+    public void addPassenger(Passenger p)
+    {
+        p.setReserv(this);
+        passengers.add(p);
+
+    }
+
+    public void removePassenger(Passenger p)
+    {
+        passengers.remove(p);
+    }
+
     public Long getId()
     {
         return id;
@@ -56,12 +77,12 @@ public class Reservation implements Serializable
         this.id = id;
     }
 
-    public short getPrice()
+    public float getPrice()
     {
         return price;
     }
 
-    public void setPrice(short price)
+    public void setPrice(float price)
     {
         this.price = price;
     }
@@ -85,7 +106,6 @@ public class Reservation implements Serializable
     {
         this.passengers = passengers;
     }
-    
 
     @Override
     public int hashCode()

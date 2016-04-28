@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
 
 /**
  *
@@ -26,11 +26,11 @@ public class Airline implements Serializable
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Flight> flights;
+    private List<Flight> flights = new ArrayList();;
 
     public void addFlight(Flight f)
     {
@@ -44,6 +44,11 @@ public class Airline implements Serializable
 
     public Airline()
     {
+    }
+
+    public Airline(String name)
+    {
+        this.name = name;
     }
 
     public Airline(String name, List<Flight> flights)
