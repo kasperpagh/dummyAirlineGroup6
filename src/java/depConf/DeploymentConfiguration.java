@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 import java.util.TimeZone;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,54 +26,49 @@ public class DeploymentConfiguration implements ServletContextListener
     @Override
     public void contextInitialized(ServletContextEvent sce)
     {
-//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("dummyAirline6PU");
-//        EntityManager em = emf.createEntityManager();
-//        try
-//        {
-//            em.getTransaction().begin();
-//            //dec//
-//            Date d = new Date(2016, 4, 4);            
-//            Airline al = new Airline("Group_6 Airlines INC.");
-//            Airport airportCPH = new Airport("CPH", "CET", "Copenhagen Kastrup", "Denmark", "Copenhagen");            
-//            Airport airportSTN = new Airport("STN", "GMT+1", "London Stansted Airport", "England", "London");      
-//            Flight flight = new Flight(al, "A1", "2 hours", (short) 100, airportSTN, airportCPH);
-//            FlightInstance flightInstance = new FlightInstance(flight, "1a", getISO8601StringForDate(d), 120, (short)45,(float) 75.0);
-//            Reservation reservation = new Reservation((float) 150.0, flightInstance);
-//            Passenger pass1 = new Passenger("Bob", "Arne");
-//            Passenger pass2 = new Passenger("John", "Lamasen");
-//            //dec//
-//            
-//            reservation.addPassenger(pass2);
-//            reservation.addPassenger(pass1);
-//            flightInstance.addReservation(reservation);
-//            flight.addFlightInstance(flightInstance);
-//            flight.setAirportTo(airportSTN);
-//            flight.setAirportFrom(airportCPH);
-//            al.addFlight(flight);
-//            em.persist(al);
-//            em.getTransaction().commit();
-//            
-            //
-            
-            
-            
-//            
-//            
-//        }
-//        catch (Exception e)
-//        {
-//            System.out.println("der er knas i deployment config!! her er besked: " + e.getMessage());
-//        }
-//        finally
-//        {
-//            em.close();
-//        }
+        Random rand = new Random(System.currentTimeMillis());
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU_OPENSHIFT");
+        EntityManager em = emf.createEntityManager();
+        try
+        {
+            em.getTransaction().begin();
+            Airline al = new Airline("Group_6 Airlines INC.");
+            Airport airportCPH = new Airport("CPH", "CET", "Copenhagen Kastrup", "Denmark", "Copenhagen");
+            Airport airportSTN = new Airport("STN", "GMT+1", "London Stansted Airport", "England", "London");
+            Flight flight = new Flight(al, "A1", "2 hours", (short) 100, airportSTN, airportCPH);
+            long count = 1459720800000L;
+            for (int i = 0; i < 20; i++)
+            {
+                FlightInstance flightInstance = new FlightInstance(flight, "CPH-STN-" + i + rand.nextInt(100), getISO8601StringForDate(new Date(count)), 120, (short) rand.nextInt(100), (float) 75.0);
+                Reservation reservation = new Reservation((float) 150.0, flightInstance);
+                Passenger pass1 = new Passenger("Bob " + i, "Arne " + i);
+                Passenger pass2 = new Passenger("John " + i, "Lamasen " + i);
+                reservation.addPassenger(pass2);
+                reservation.addPassenger(pass1);
+                flight.addFlightInstance(flightInstance);
+                flightInstance.addReservation(reservation);
+
+                count += 604800000L;
+            }
+
+            flight.setAirportTo(airportSTN);
+            flight.setAirportFrom(airportCPH);
+            al.addFlight(flight);
+            em.persist(al);
+            em.getTransaction().commit();
+
+        }
+        finally
+        {
+            em.close();
+        }
+
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+ 
     }
 
     private static String getISO8601StringForDate(Date date)
@@ -82,5 +78,4 @@ public class DeploymentConfiguration implements ServletContextListener
         return dateFormat.format(date);
     }
 
-    
 }

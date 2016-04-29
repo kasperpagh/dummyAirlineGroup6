@@ -15,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 /**
@@ -22,6 +24,13 @@ import javax.persistence.OneToMany;
  * @author pagh
  */
 @Entity
+@NamedQueries
+({
+    @NamedQuery(name = "findByDato", query = "Select f from FlightInstance f where f.dato = :dato AND f.availableSeats > :tickets AND f.flight.airportFrom.IATACode = :from"),
+    @NamedQuery(name = "findByDato1", query = "Select f from FlightInstance f where f.dato = :dato AND f.availableSeats > :tickets AND f.flight.airportFrom.IATACode = :from AND f.flight.airportTo.IATACode = :to"),
+    @NamedQuery(name = "findById", query = "Select f from FlightInstance f where f.flightId = :flightId")
+})
+
 public class FlightInstance implements Serializable
 {
 
@@ -37,7 +46,9 @@ public class FlightInstance implements Serializable
     private short availableSeats;
     private float price;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "fi")
-    private List<Reservation> reservations = new ArrayList();;
+    private List<Reservation> reservations = new ArrayList();
+
+    ;
 
     public void addReservation(Reservation r)
     {
@@ -62,8 +73,6 @@ public class FlightInstance implements Serializable
         this.availableSeats = availableSeats;
         this.price = price;
     }
-    
-    
 
     public FlightInstance(Flight flight, String flightId, String dato, int tid, short availableSeats, float price, List<Reservation> reservations)
     {

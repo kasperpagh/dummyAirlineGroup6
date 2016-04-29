@@ -36,6 +36,7 @@ public class Reservation implements Serializable
     private FlightInstance fi;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Passenger> passengers = new ArrayList();
+    private String reserveeName;
 
     public Reservation(short price, FlightInstance fi, List<Passenger> passengers)
     {
@@ -66,6 +67,7 @@ public class Reservation implements Serializable
     {
         passengers.remove(p);
     }
+    
 
     public Long getId()
     {
@@ -135,6 +137,16 @@ public class Reservation implements Serializable
     public String toString()
     {
         return "entity.Reservation[ id=" + id + " ]";
+    }
+
+    public String getReserveeName()
+    {
+        return reserveeName;
+    }
+
+    public void setReserveeName(String reserveeName)
+    {
+        this.reserveeName = reserveeName;
     }
 
 }
