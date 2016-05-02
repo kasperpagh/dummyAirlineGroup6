@@ -26,8 +26,8 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQueries
 ({
-    @NamedQuery(name = "findByDato", query = "Select f from FlightInstance f where f.dato = :dato AND f.availableSeats > :tickets AND f.flight.airportFrom.IATACode = :from"),
-    @NamedQuery(name = "findByDato1", query = "Select f from FlightInstance f where f.dato = :dato AND f.availableSeats > :tickets AND f.flight.airportFrom.IATACode = :from AND f.flight.airportTo.IATACode = :to"),
+    @NamedQuery(name = "findByDato", query = "Select f from FlightInstance f where f.dato LIKE :dato AND f.availableSeats > :tickets AND f.flight.airportFrom.IATACode = :from"),
+    @NamedQuery(name = "findByDato1", query = "Select f from FlightInstance f where f.dato LIKE :dato AND f.availableSeats > :tickets AND f.flight.airportFrom.IATACode = :from AND f.flight.airportTo.IATACode = :to"),
     @NamedQuery(name = "findById", query = "Select f from FlightInstance f where f.flightId = :flightId")
 })
 

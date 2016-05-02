@@ -39,7 +39,10 @@ public class FlightService
         jo.addProperty("airline", "Group_6 Airlines INC.");
 
         Query query = em.createNamedQuery("findByDato", FlightInstance.class);
-        query.setParameter("dato", dato);
+        System.out.println("random git ændring");
+        String dato1 = dato.substring(0, 10);
+        dato1 = "%"+dato1+"%";
+        query.setParameter("dato", dato1);
         query.setParameter("tickets", Integer.parseInt(amountOfTickets));
         query.setParameter("from", fromAirport);
         JsonArray ja = new JsonArray();
@@ -78,7 +81,9 @@ public class FlightService
         jo.addProperty("airline", "Group_6 Airlines INC.");
 
         Query query = em.createNamedQuery("findByDato1", FlightInstance.class);
-        query.setParameter("dato", dato);
+        String dato1 = dato.substring(0, 10);
+        dato1 = "%"+dato1+"%";
+        query.setParameter("dato", dato1);
         query.setParameter("tickets", Integer.parseInt(amountOfTickets));
         query.setParameter("from", fromAirport);
         query.setParameter("to", toAirport);
@@ -107,7 +112,5 @@ public class FlightService
         return gson.toJson(jo);
 
     }
-    
-    
 
 }
