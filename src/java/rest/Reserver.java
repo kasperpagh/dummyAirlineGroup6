@@ -77,11 +77,11 @@ public class Reserver
             //////////////
             JsonObject jo = new JsonObject();
             jo.addProperty("flightNumber", flightId);
-            jo.addProperty("origin", fi.getFlight().getAirportFrom().getName() + fi.getFlight().getAirportFrom().getIATACode());
-            jo.addProperty("destination", fi.getFlight().getAirportTo().getName() + fi.getFlight().getAirportTo().getIATACode());
+            jo.addProperty("origin", fi.getFlight().getAirportFrom().getName() + "(" +  fi.getFlight().getAirportFrom().getIATACode() + ")");
+            jo.addProperty("destination", fi.getFlight().getAirportTo().getName() + "(" + fi.getFlight().getAirportTo().getIATACode() + ")");
             jo.addProperty("date", fi.getDato());
             jo.addProperty("flightTime", fi.getFlight().getFlightTime());
-            jo.addProperty("numberOfSeats", fi.getAvailableSeats());
+            jo.addProperty("numberOfSeats", res.getPassengers().size());
             jo.add("passengers", ja);
             return gson.toJson(jo);
             
