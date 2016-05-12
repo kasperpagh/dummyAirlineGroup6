@@ -76,7 +76,7 @@ public class Reserver
 
             em.getTransaction().commit();
 
-            if(res.getPassengers().size() < fi.getAvailableSeats())
+            if(res.getPassengers().size() > fi.getAvailableSeats())
             {
                 return gson.toJson(new ErrorMessage(400, "Not enough seats, we are sorry", 2));
             }

@@ -119,7 +119,7 @@ public class FlightService
         {
             FlightInstance fi = (FlightInstance) query.getResultList().get(i);
 
-            if (fi.getAvailableSeats() < Integer.parseInt(amountOfTickets))
+            if (fi.getAvailableSeats() > Integer.parseInt(amountOfTickets))
             {
 
                 JsonObject jo1 = new JsonObject();
