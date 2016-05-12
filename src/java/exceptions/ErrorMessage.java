@@ -12,13 +12,21 @@ package exceptions;
 public class ErrorMessage
 {
 
-    private int code;
+    private int httpError;
     private String message;
+    private int errorCode;
 
     public ErrorMessage(Throwable ex, int code)
     {
-        this.code = code;
+        this.httpError = code;
         this.message = ex.getMessage();
+    }
+
+    public ErrorMessage(int httpError, String message, int errorCode)
+    {
+        this.httpError = httpError;
+        this.message = message;
+        this.errorCode = errorCode;
     }
 
     public String getMessage()
@@ -29,6 +37,26 @@ public class ErrorMessage
     public void setMessage(String message)
     {
         this.message = message;
+    }
+
+    public int getHttpError()
+    {
+        return httpError;
+    }
+
+    public void setHttpError(int httpError)
+    {
+        this.httpError = httpError;
+    }
+
+    public int getErrorCode()
+    {
+        return errorCode;
+    }
+
+    public void setErrorCode(int errorCode)
+    {
+        this.errorCode = errorCode;
     }
 
 }

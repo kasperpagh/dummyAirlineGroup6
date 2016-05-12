@@ -7,22 +7,20 @@ package exceptions;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import javax.servlet.ServletContext;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-
 /**
  *
  * @author kaspe
  */
 @Provider
-public class ThrowableMapper implements ExceptionMapper<Throwable>
+public class NoFlightFoundExceptionMapper implements ExceptionMapper<NoFlightFoundException>
 {
 
     Gson g = new GsonBuilder().setPrettyPrinting().create();
@@ -30,14 +28,14 @@ public class ThrowableMapper implements ExceptionMapper<Throwable>
     ServletContext context;
 
     @Override
-    public Response toResponse(Throwable e)
+    public Response toResponse(NoFlightFoundException e)
     {
-        ErrorMessage err = new ErrorMessage(e,Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-        err.setMessage("Internal server Error, we are very sorry for the inconvenience");
-        err.setErrorCode(4);
-        err.setHttpError(500);
-        Response out = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(g.toJson(err)).type(MediaType.APPLICATION_JSON).build();
+        ErrorMessage err = new ErrorMessage(e, Response.Status.NOT_FOUND.getStatusCode());
+        err.setMessage("No flights, we are sorry");
+        err.setErrorCode(1);
+        err.setHttpError(400);
+        Response out = Response.status(400).entity(g.toJson(err)).type(MediaType.APPLICATION_JSON).build();
         return out;
-
     }
+
 }

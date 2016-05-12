@@ -8,6 +8,7 @@ package rest;
 import java.util.Set;
 import javax.ws.rs.core.Application;
 
+
 /**
  *
  * @author kaspe
@@ -16,6 +17,7 @@ import javax.ws.rs.core.Application;
 public class ApplicationConfig extends Application
 {
 
+    
     @Override
     public Set<Class<?>> getClasses()
     {
@@ -32,6 +34,8 @@ public class ApplicationConfig extends Application
      */
     private void addRestResourceClasses(Set<Class<?>> resources)
     {
+        resources.add(exceptions.NoFlightFoundExceptionMapper.class);
+        resources.add(exceptions.NoSeatsExceptionMapper.class);
         resources.add(exceptions.NotFoundExceptionMapper.class);
         resources.add(exceptions.ThrowableMapper.class);
         resources.add(rest.CORSFilter.class);

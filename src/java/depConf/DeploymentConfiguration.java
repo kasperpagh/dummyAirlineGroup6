@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebListener;
 public class DeploymentConfiguration implements ServletContextListener
 {
 
+    
     @Override
     public void contextInitialized(ServletContextEvent sce)
     {
@@ -34,7 +35,7 @@ public class DeploymentConfiguration implements ServletContextListener
             em.getTransaction().begin();
 
             //
-            Airline al = new Airline("Group_6 Airlines INC.");
+            Airline al = new Airline("LlamaLines");
             Airport airportCPH = new Airport("CPH", "CET", "Copenhagen Kastrup", "Denmark", "Copenhagen");
             Airport airportSTN = new Airport("STN", "GMT+1", "London Stansted Airport", "England", "London");
             Flight flight = new Flight(al, "A1", "2 hours", (short) 100, airportSTN, airportCPH);

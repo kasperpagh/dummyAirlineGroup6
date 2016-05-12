@@ -13,6 +13,8 @@ import com.google.gson.JsonParser;
 import entity.FlightInstance;
 import entity.Passenger;
 import entity.Reservation;
+import exceptions.ErrorMessage;
+import exceptions.IllegalDataException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -41,12 +43,12 @@ public class Reserver
     @Path("/{flightId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String makeReservation(@PathParam("flightId") String flightId, String personJson)
+    public String makeReservation(@PathParam("flightId") String flightId, String personJson) throws IllegalDataException
     {
         EntityManager em = emf.createEntityManager();
         try
         {
-
+            
             em.getTransaction().begin();
             Query query = em.createNamedQuery("findById", FlightInstance.class);
             query.setParameter("flightId", flightId);
@@ -74,6 +76,10 @@ public class Reserver
 
             em.getTransaction().commit();
 
+            if(res.getPassengers().size() < fi.getAvailableSeats())
+            {
+                return gson.toJson(new ErrorMessage(400, "Not enough seats, we are sorry", 2));
+            }
             //////////////
             JsonObject jo = new JsonObject();
             jo.addProperty("flightNumber", flightId);
@@ -85,6 +91,10 @@ public class Reserver
             jo.add("passengers", ja);
             return gson.toJson(jo);
             
+        }
+        catch(Exception e)
+        {
+            throw new IllegalDataException();
         }
         finally
         {

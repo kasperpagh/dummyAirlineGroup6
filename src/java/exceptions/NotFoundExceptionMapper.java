@@ -35,6 +35,8 @@ public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundExceptio
 
         ErrorMessage err = new ErrorMessage(e, Response.Status.NOT_FOUND.getStatusCode());
         err.setMessage("The requested ressource/URL was not found (NotFoundException)");
+        err.setErrorCode(10);
+        err.setHttpError(404);
         Response out = Response.status(Response.Status.NOT_FOUND).entity(g.toJson(err)).type(MediaType.APPLICATION_JSON).build();
         return out;
 
